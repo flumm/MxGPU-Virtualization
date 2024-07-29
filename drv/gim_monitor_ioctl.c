@@ -289,8 +289,11 @@ int amdgim_create_cdev(void)
 		gim_err("Error %d while adding amdgim", ret);
 		goto fail_cdevadd;
 	}
-
+#if(LINUX_VERSION_CODE < KERNEL_VERSION(6,4,0))
 	amdgim_class = class_create(THIS_MODULE, AMDGIM_CLASS_NAME);
+#else
+	amdgim_class = class_create(AMDGIM_CLASS_NAME);
+#endif
 	device_create(amdgim_class, NULL, MKDEV(amdgim_pdev->major, 0),
 			NULL, AMDGIM_DEVICE_FILE_NAME);
 

@@ -694,7 +694,11 @@ uint32_t set_new_adapter(struct pci_dev *pdev)
 		write_register(pf, mmSMU_IND_INDEX_0, 0);
 
 		/* Set the dma mask to be 40 bits address range */
+#if(LINUX_VERSION_CODE < KERNEL_VERSION(5,18,0))
 		pci_set_dma_mask(curr->pf.pci_dev, 0xffffffffffull);
+#else
+		dma_set_mask(&curr->pf.pci_dev->dev, 0xffffffffffull);
+#endif
 
 		/* interrupt */
 		size = sizeof(struct interrupt_handler);
